@@ -1,95 +1,123 @@
+'use client'
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
+import { Link } from '@chakra-ui/next-js';
+
+import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
+import  files  from "./files";
+import Languages from "./languages";
+import examples from "./config/examples";
+
+import { Box, HStack, SimpleGrid } from '@chakra-ui/react'
+
+
+import config from "./config";
+import { useStateContext } from "./context/state";
+import Sidebar from "./section/sidebar";
+import Heading from "./section/heading";
+import Save from "./section/save";
 
 export default function Home() {
+  const editorRef = useRef();
+  const monaco = useMonaco();
+  const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
+
+
+  const onMount = (editor) => {
+    editorRef.current = editor;
+    editor.focus();
+  }
+
+  const [fileName, setFileName] = useState("script.js");
+
+  const file = files[fileName];
+  useEffect(() => {
+    editorRef.current?.focus();
+  }, [file.name]);
+  
+
+  useEffect(() => {
+    if (monaco) {
+      console.log('here is the monaco instance:', monaco);
+    }
+  }, [monaco]);
+
+  console.log(selectedLanguageId)
+
+    const supportedLanguages = config.supportedLanguages
+   const language = supportedLanguages?.find(({ id }) => id === selectedLanguageId)?.name;
+
+   console.log(language)
+
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <main >
+      <Box
+      overflow={'hidden'}
+     
+      >
+      
+
+{/* <button
+        disabled={fileName === "script.js"}
+        onClick={() => setFileName("script.js")}
+      >
+        script.js
+      </button>
+      <button
+        disabled={fileName === "style.css"}
+        onClick={() => setFileName("style.css")}
+      >
+        style.css
+      </button>
+      <button
+        disabled={fileName === "index.html"}
+        onClick={() => setFileName("index.html")}
+      >
+        index.html
+      </button> */}
+       <Heading/>
+       <hr/>
+       <Save/>
+      <HStack >
+        <Box 
+        w={"auto"}   
+        
+        bg={'black'} 
+        color={'gray.500'}
+         >
+          <Sidebar/>
+        </Box>
+
+        <Box
+        // overflowY={'hidden'}
+         w={'100%'}>
+          <Editor
+            height="100vh"
+            width={'100%'}
+            theme="vs-dark"
+            path={language}
+            defaultValue={examples[selectedLanguageId] || ''}
+            defaultLanguage={language}
+            onMount={onMount}
+           
             />
-          </a>
-        </div>
-      </div>
+             {/* <Editor
+        height="95vh"
+        theme="vs-dark"
+        path={file.name}
+        defaultLanguage={file.language}
+        defaultValue={file.value}
+        onMount={(editor) => (editorRef.current = editor)}
+      /> */}
+        </Box>
+      </HStack>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+          <Languages />
+        
+        {/* <Editor height="100vh" defaultLanguage="javascript" defaultValue="// some comment" />; */}
+      </Box>
     </main>
   );
 }

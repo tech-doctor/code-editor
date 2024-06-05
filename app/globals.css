@@ -1,3 +1,6 @@
+.body{
+  background-color: #3b323233;
+}
 :root {
   --max-width: 1100px;
   --border-radius: 12px;

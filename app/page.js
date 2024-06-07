@@ -10,8 +10,6 @@ import Languages from "./languages";
 import examples from "./config/examples";
 
 import { Box, HStack, SimpleGrid } from '@chakra-ui/react'
-
-
 import config from "./config";
 import { useStateContext } from "./context/state";
 import Sidebar from "./section/sidebar";
@@ -21,20 +19,23 @@ import Save from "./section/save";
 export default function Home() {
   const editorRef = useRef();
   const monaco = useMonaco();
-  const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
+  //const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
+  const [fileContent, setFileContent] = useStateContext();
 
+
+  console.log(fileContent)
 
   const onMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
   }
 
-  const [fileName, setFileName] = useState("script.js");
+  //const [fileName, setFileName] = useState("script.js");
 
-  const file = files[fileName];
-  useEffect(() => {
-    editorRef.current?.focus();
-  }, [file.name]);
+  // const file = files[fileName];
+  // useEffect(() => {
+  //   editorRef.current?.focus();
+  // }, [file.name]);
   
 
   useEffect(() => {
@@ -43,47 +44,28 @@ export default function Home() {
     }
   }, [monaco]);
 
-  console.log(selectedLanguageId)
+  //console.log(selectedLanguageId)
+   //const supportedLanguages = config.supportedLanguages
+  // const language = supportedLanguages?.find(({ id }) => id === selectedLanguageId)?.name;
 
-    const supportedLanguages = config.supportedLanguages
-   const language = supportedLanguages?.find(({ id }) => id === selectedLanguageId)?.name;
+   //const language = supportedLanguages.find(lang => lang.id === selectedLanguageId)?.name || 'Unknown';
+   //console.log(language)
 
-   console.log(language)
 
+   const handleClick = (event) => {
+      setFileContent(event)
+      console.log(fileContent)
+   }
 
   return (
     <main >
-      <Box
-      overflow={'hidden'}
-     
-      >
-      
-
-{/* <button
-        disabled={fileName === "script.js"}
-        onClick={() => setFileName("script.js")}
-      >
-        script.js
-      </button>
-      <button
-        disabled={fileName === "style.css"}
-        onClick={() => setFileName("style.css")}
-      >
-        style.css
-      </button>
-      <button
-        disabled={fileName === "index.html"}
-        onClick={() => setFileName("index.html")}
-      >
-        index.html
-      </button> */}
+      <Box >
        <Heading/>
        <hr/>
        <Save/>
       <HStack >
         <Box 
         w={"auto"}   
-        
         bg={'black'} 
         color={'gray.500'}
          >
@@ -94,23 +76,18 @@ export default function Home() {
         // overflowY={'hidden'}
          w={'100%'}>
           <Editor
+            onChange={handleClick}
             height="100vh"
             width={'100%'}
             theme="vs-dark"
-            path={language}
-            defaultValue={examples[selectedLanguageId] || ''}
-            defaultLanguage={language}
+            // path={language}
+            path={'javascript'}
+           //value={examples[selectedLanguageId] || ''}
+            value={fileContent}
+            // defaultLanguage={language}
+            defaultLanguage={'javascript'}
             onMount={onMount}
-           
             />
-             {/* <Editor
-        height="95vh"
-        theme="vs-dark"
-        path={file.name}
-        defaultLanguage={file.language}
-        defaultValue={file.value}
-        onMount={(editor) => (editorRef.current = editor)}
-      /> */}
         </Box>
       </HStack>
 

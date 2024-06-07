@@ -1,39 +1,52 @@
+import { useStateContext } from '@/app/context/state';
 import { Text, Icon, Box } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FaFile } from 'react-icons/fa';
 
 
 
-const File = ({ name }) => {
-
-    const [isHovered, setIsHovered] = useState(false);
+const File = ({ name, path }) => {
     const [isClicked, setIsClicked] = useState(false);
-  
-    const handleToggle = () => {
-      setIsClicked(!isClicked);
-    };
-  
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-  
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
+    //const [fileContent, setFileContent] = useState('');
+    const [fileContent, setFileContent] = useStateContext();
+    
 
+    const handleToggle = async () => {
+      setFileContent('///Loading...: Fetching file content...')
+      if (!isClicked) {
+          const response = await fetch(`https://magento1-demo.inter.scot/agent.php?load&file=${encodeURIComponent(path)}`);
+          if (response.ok) {
+              const content = await response.text();
+              console.log(content)
+              setFileContent(content);
+              setIsClicked(true);
+          } else {
+            console.error('Failed to fetch file content');
+            setFileContent('*** ERROR!: Failed to fetch file content')
+          }
+      } else {
+          setIsClicked(false);
+      }
+  };
+  
+  
   return (
     <Box
     display="flex"
     alignItems="center"
     cursor="pointer"
     px={4}
-    bg={isClicked ||isHovered ? 'gray.900' : 'transparent'}
-    onMouseEnter={handleMouseEnter}
-    onMouseLeave={handleMouseLeave}
+    _hover={{ 
+      backgroundColor: 'gray.900',
+      color: 'gray.300'
+     }}
+    color={isClicked ? 'gray.400' : 'gray.500'}
+    bg={
+      isClicked? 'gray.900' : 'transparent'
+    }
     onClick={handleToggle}
-
     >
-      <Icon as={FaFile} mr={2} color={isClicked ? 'gray.600' : 'gray.500'}/>
+      <Icon as={FaFile} mr={2} />
       <Text>{name}</Text>
     </Box>
   );

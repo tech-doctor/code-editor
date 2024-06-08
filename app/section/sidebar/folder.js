@@ -9,6 +9,7 @@ const Folder = ({ name, nodes }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => setIsOpen(!isOpen);
+  //console.log(nodes)
 
   return (
     <VStack align="start" spacing={2}>
@@ -37,7 +38,7 @@ const Folder = ({ name, nodes }) => {
         <VStack 
         
         pl={4} align="start" spacing={2}>
-          {nodes.map((node, index) => (
+          {nodes?.map((node, index) => (
             <FolderOrFile key={index} node={node} />
           ))}
         </VStack>

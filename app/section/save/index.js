@@ -16,6 +16,8 @@ content:"This is a test\nThis is another line here\n"}
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+
+  
   function getToast(){
       if(data) {
         toast({
@@ -41,6 +43,7 @@ content:"This is a test\nThis is another line here\n"}
     try {
       const result = await fetcher(url, { body });
       setData(result);
+      console.log(result)
     } catch (err) {
       setError(err);
     } finally {
@@ -49,6 +52,36 @@ content:"This is a test\nThis is another line here\n"}
 
     }
   };
+  
+//  const handleClick = async () => {
+
+//   try {
+//     const response = await fetch(url, {
+//        //mode: 'no-cors',
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(body),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok');
+//     }
+
+//     const result = await response.json();
+//     setData(result);
+//     console.log(response)
+//     console.log('ready')
+//   } catch (err) {
+//     //setError(err.message);
+//     console.log(err)
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+  
 
     return(
     <Box bg={'gray.900'} p={3} display="flex" justifyContent="flex-end">

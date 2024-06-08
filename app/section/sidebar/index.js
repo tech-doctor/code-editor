@@ -10,7 +10,7 @@ const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 const Sidebar = () => {
   const { data, error, isLoading } = useSWR('https://magento1-demo.inter.scot/agent.php?list', fetcher)
-   console.log(data)
+   //console.log(data)
   return(
         <Box 
         overflowY={'auto'}

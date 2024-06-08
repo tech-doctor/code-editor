@@ -4,8 +4,11 @@ import { useStateContext } from '../context/state';
 
 
   const Languages = () => {
-    const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
+    //const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
 
+    const { fileState, languageIdState } =  useStateContext();
+
+    const [selectedLanguageId, setSelectedLanguageId] = languageIdState;
 
     function handleLanguageChange(e) {
         setSelectedLanguageId(e.target.value);

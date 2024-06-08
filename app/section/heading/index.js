@@ -1,7 +1,7 @@
 const Heading = () => {
     return(
         <div>
-            Heading
+            Interscot Code Editor
         </div>
     )
   }

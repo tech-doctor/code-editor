@@ -1,15 +1,15 @@
 'use client'
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Link } from '@chakra-ui/next-js';
 
-import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
+import Editor, { useMonaco} from '@monaco-editor/react';
 import  files  from "./files";
 import Languages from "./languages";
 import examples from "./config/examples";
 
-import { Box, HStack, SimpleGrid } from '@chakra-ui/react'
+import { Box, HStack } from '@chakra-ui/react'
 import config from "./config";
 import { useStateContext } from "./context/state";
 import Sidebar from "./section/sidebar";
@@ -20,10 +20,15 @@ export default function Home() {
   const editorRef = useRef();
   const monaco = useMonaco();
   //const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
-  const [fileContent, setFileContent] = useStateContext();
+  
+  const { fileState, languageIdState, pathState } =  useStateContext();
 
+  const [fileContent, setFileContent] = fileState;
+  const [selectedLanguageId, setSelectedLanguageId] = languageIdState;
+  const [filePath, setFilePath] = pathState;
 
-  console.log(fileContent)
+  //console.log(fileContent)
+ // console.log(filePath)
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -45,16 +50,17 @@ export default function Home() {
   }, [monaco]);
 
   //console.log(selectedLanguageId)
-   //const supportedLanguages = config.supportedLanguages
-  // const language = supportedLanguages?.find(({ id }) => id === selectedLanguageId)?.name;
+  //const supportedLanguages = config.supportedLanguages
+  //const language = supportedLanguages?.find(({ id }) => id === selectedLanguageId)?.name;
 
+  //const path =  supportedLanguages?.find(({ id }) => id === selectedLanguageId)?.path;
    //const language = supportedLanguages.find(lang => lang.id === selectedLanguageId)?.name || 'Unknown';
-   //console.log(language)
+   //console.log(examples[selectedLanguageId])
 
 
    const handleClick = (event) => {
       setFileContent(event)
-      console.log(fileContent)
+      //console.log(fileContent)
    }
 
   return (
@@ -71,17 +77,14 @@ export default function Home() {
          >
           <Sidebar/>
         </Box>
-
         <Box
-        // overflowY={'hidden'}
          w={'100%'}>
           <Editor
             onChange={handleClick}
             height="100vh"
             width={'100%'}
             theme="vs-dark"
-            // path={language}
-            path={'javascript'}
+            path={filePath}
            //value={examples[selectedLanguageId] || ''}
             value={fileContent}
             // defaultLanguage={language}
@@ -90,11 +93,17 @@ export default function Home() {
             />
         </Box>
       </HStack>
-
-          <Languages />
+          {/* <Languages /> */}
         
-        {/* <Editor height="100vh" defaultLanguage="javascript" defaultValue="// some comment" />; */}
       </Box>
     </main>
   );
 }
+
+
+
+
+//////FTP credentials:
+// Hostname: dev.inter.scot
+// Username: coding-oluka
+// Password: 4a17kz7A$

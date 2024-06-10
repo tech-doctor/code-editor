@@ -18,7 +18,7 @@ const Sidebar = () => {
         px={5} py={4} pb={'80px'}>
         <Heading size="md" mb={4}>Files Tree</Heading>
         {data? <Container>
-           <Folder name="List" nodes={data} />
+           <Folder name="/" nodes={data} />
          </Container>: isLoading? <div>Loading files...</div> : 
          <div>failed to load</div>
          } 

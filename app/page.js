@@ -21,14 +21,14 @@ export default function Home() {
   const monaco = useMonaco();
   //const [selectedLanguageId, setSelectedLanguageId] = useStateContext();
   
-  const { fileState, languageIdState, pathState } =  useStateContext();
+  const { fileState, pathState } =  useStateContext();
 
   const [fileContent, setFileContent] = fileState;
-  const [selectedLanguageId, setSelectedLanguageId] = languageIdState;
+  //const [selectedLanguageId, setSelectedLanguageId] = languageIdState;
   const [filePath, setFilePath] = pathState;
 
   //console.log(fileContent)
- // console.log(filePath)
+  //console.log(filePath)
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -45,7 +45,7 @@ export default function Home() {
 
   useEffect(() => {
     if (monaco) {
-      console.log('here is the monaco instance:', monaco);
+      //console.log('here is the monaco instance:', monaco);
     }
   }, [monaco]);
 
@@ -63,6 +63,7 @@ export default function Home() {
       //console.log(fileContent)
    }
 
+   //console.log(fileContent)
   return (
     <main >
       <Box >
@@ -87,8 +88,6 @@ export default function Home() {
             path={filePath}
            //value={examples[selectedLanguageId] || ''}
             value={fileContent}
-            // defaultLanguage={language}
-            defaultLanguage={'javascript'}
             onMount={onMount}
             />
         </Box>

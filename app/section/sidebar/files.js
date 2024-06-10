@@ -7,36 +7,36 @@ import { FaFile } from 'react-icons/fa';
 
 const File = ({ name, path }) => {
     const [isClicked, setIsClicked] = useState(false);
-    //const [fileContent, setFileContent] = useState('');
-    //const [fileContent, setFileContent] = useStateContext();
-    
-
     const { fileState, pathState } =  useStateContext();
 
     const [fileContent, setFileContent] = fileState;
     const [filePath, setFilePath] = pathState;
 
+  const handleToggle = async () => {
+    setFileContent('///Loading...: Fetching file content...');
 
-    const handleToggle = async () => {
-      setFileContent('///Loading...: Fetching file content...')
-      if (!isClicked) {
-          const response = await fetch(`https://magento1-demo.inter.scot/agent.php?load&file=${encodeURIComponent(path)}`);
-          if (response.ok) {
-              const content = await response.text();
-              console.log(content)
-              setFileContent(content);
-              setFilePath(path);
-              setIsClicked(true);
-              console.log(path)
-          } else {
-            console.error('Failed to fetch file content');
-            setFileContent('*** ERROR!: Failed to fetch file content')
-          }
-      } else {
-          setIsClicked(false);
-      }
-  };
-  
+    try {
+        if (!isClicked) {
+            const response = await fetch(`https://magento1-demo.inter.scot/agent.php?load&file=${encodeURIComponent(path)}`);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch file content');
+            }
+
+            const content = await response.text();
+            setFileContent(content);
+            setFilePath(path);
+            setIsClicked(true);
+           // console.log(path);
+        } else {
+            setIsClicked(false);
+        }
+    } catch (error) {
+       // console.error(error);
+        setFileContent('*** ERROR!: Failed to fetch file content');
+    }
+};
+
   
   return (
     <Box
